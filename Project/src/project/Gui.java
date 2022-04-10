@@ -110,35 +110,55 @@ JTextField text1 , text2 , text3;
 	    {
 	    	 public void actionPerformed(ActionEvent e)
 	    	 {
-	    		 File f1 = new File("Txt_1.txt");
-	    	      String[] words=null;  //Intialize the word Array
-	    	      FileReader fr = new FileReader(f1);  //Creation of File Reader object
-	    	      BufferedReader br = new BufferedReader(fr); //Creation of BufferedReader object
-	    	      String s;     
-	    	      String input="Java";   // Input word to be searched
-	    	      int count=0;   //Intialize the word to zero
-	    	      while((s=br.readLine())!=null)   //Reading Content from the file
-	    	      {
-	    	         words=s.split(" ");  //Split the word using space
-	    	          for (String word : words) 
-	    	          {
-	    	                 if (word.equals(input))   //Search for the given word
-	    	                 {
-	    	                   count++;    //If Present increase the count by one
-	    	                 }
-	    	          }
-	    	      }
-	    	      if(count!=0)  //Check for count not equal to zero
-	    	      {
-	    	         System.out.println("The given word is present for "+count+ " Times in the file");
-	    	      }
-	    	      else
-	    	      {
-	    	         System.out.println("The given word is not present in the file");
-	    	      }
-	    			
-	    	      fr.close();
-	    	 }
+	 	        BufferedReader reader1 = new BufferedReader(new FileReader("Txt_1.txt"));
+		         
+		        BufferedReader reader2 = new BufferedReader(new FileReader("Txt_2.txt"));
+		         
+		        String line1 = reader1.readLine();
+		         
+		        String line2 = reader2.readLine();
+		         
+		        boolean areEqual = true;
+		         
+		        int lineNum = 1;
+		         
+		        while (line1 != null || line2 != null)
+		        {
+		            if(line1 == null || line2 == null)
+		            {
+		                areEqual = false;
+		                 
+		                break;
+		            }
+		            else if(! line1.equalsIgnoreCase(line2))
+		            {
+		                areEqual = false;
+		                 
+		                break;
+		            }
+		             
+		            line1 = reader1.readLine();
+		             
+		            line2 = reader2.readLine();
+		             
+		            lineNum++;
+		        }
+		         
+		        if(areEqual)
+		        {
+		            System.out.println("Two files have same content.");
+		        }
+		        else
+		        {
+		            System.out.println("Two files have different content. They differ at line "+lineNum);
+		             
+		            System.out.println("File1 has "+line1+" and File2 has "+line2+" at line "+lineNum);
+		        }
+		         
+		        reader1.close();
+		         
+		        reader2.close();
+		    }
 	    }
 	    private class ButtonListener3 implements ActionListener
 	    {
