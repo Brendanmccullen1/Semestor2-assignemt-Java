@@ -14,7 +14,21 @@ public class Compare {
     // main method
     public static void main(String[] args) throws IOException
     {
-  
+    	//-------------------------------------------------------------------------------------
+    	
+        BufferedReader bufReader3 = new BufferedReader(new FileReader("Stop_Words.txt"));
+        ArrayList<String>Arraylist3 = new ArrayList<String>();
+        
+        String line3 = bufReader3.readLine();
+        while (line3 != null) { 
+        	Arraylist3.add(line3);
+        	line3 = bufReader3.readLine();
+        	} 
+        bufReader3.close();
+        //-----------------------------------------------------------------------
+    	
+    	
+    	
         // create ArrayList list1
     	FileReader Filereader = new FileReader("Txt_1.txt");
         ArrayList<String>Arraylist1 = new ArrayList<String>();
@@ -38,20 +52,26 @@ public class Compare {
         }
         
         int size = Arraylist1.size();
+        Arraylist1.removeAll(Arraylist3);
         
         HashMap<String, Integer> languageMap = convertArrayListToHashMap(Arraylist1);
-        for(String str : Arraylist1)
-        {
-            Integer value = languageMap.get(str) == null ? 0 : languageMap.get(str).getValue();
-            value++;
-            // if item exists, it'll be overriden.
-            languageMap.put(str, value);
-        }
-
-  
+        //System.out.println(languageMap);
+        
+        TreeMap<String, Integer> firstten = putFirstEntries(10, languageMap);
+        //System.out.println(firstten);
+        
+        Set<String> setKeys = firstten.keySet();
+        
+        List<String> listKeys = new ArrayList<String>(setKeys);
+        System.out.println(listKeys);
         // print list 1
         
+        
+        
+        //----------------------------------------------------------------------------------
   
+        
+        
         // Create ArrayList list2
         FileReader Filereader2 = new FileReader("Txt_2.txt");
         ArrayList<String>Arraylist2 = new ArrayList<String>();
@@ -76,47 +96,53 @@ public class Compare {
         
         int size2 = Arraylist2.size();
         
-        
-        BufferedReader bufReader3 = new BufferedReader(new FileReader("Stop_Words.txt"));
-        ArrayList<String>Arraylist3 = new ArrayList<String>();
-        
-        String line3 = bufReader3.readLine();
-        while (line3 != null) { 
-        	Arraylist3.add(line3);
-        	line3 = bufReader3.readLine();
-        	} 
-        bufReader3.close();
-        
-        Arraylist1.removeAll(Arraylist3);
         Arraylist2.removeAll(Arraylist3);
         
-  
+        HashMap<String, Integer> languageMap2 = convertArrayListToHashMap(Arraylist2);
+        //System.out.println(languageMap2);
+        
+        TreeMap<String, Integer> firstten2 = putFirstEntries(10, languageMap2);
+        //System.out.println(firstten2);
+        
+        Set<String> setKeys2 = firstten2.keySet();
+        
+        List<String> listKeys2 = new ArrayList<String>(setKeys2);
+        System.out.println(listKeys2);
+        
+        //---------------------------------------------------------------------------
+        //
         // print list 2
-        System.out.println("List1: "+ Arraylist1);
-        System.out.println("List2: " + Arraylist2);
+       // System.out.println("List1: "+ Arraylist1);
+       // System.out.println("List2: " + Arraylist2);
         
-        System.out.println("Size of txt file 1: " + size);
-        System.out.println("Size of txt file 2: " + size2);
+       // System.out.println("Size of txt file 1: " + size);
+       // System.out.println("Size of txt file 2: " + size2);
         
-        Arraylist1.retainAll(Arraylist2);
+        listKeys.retainAll(listKeys2);
   
         // Find common elements
-        System.out.print("Common elements: " + Arraylist1);
+        System.out.print("Common elements: " + listKeys2);
     }
     
 private static HashMap<String, Integer>convertArrayListToHashMap(ArrayList<String> arrayList)
 {
 
 	LinkedHashMap<String, Integer> linkedHashMap= new LinkedHashMap<>();
-
-	for (String str : arrayList) 
-	{
-		int value = linkedHashMap.get(str) == null;
-		linkedHashMap.get(str).getValue();
-
-		linkedHashMap.put(str, str.length());
+	for(String i :arrayList) {
+		Integer j = linkedHashMap.get(i);
+		linkedHashMap.put(i, (j ==null) ? 1: j + 1);
 	}
-
 	return linkedHashMap;
 }
+public static TreeMap<String, Integer> putFirstEntries(int max, HashMap<String, Integer> source) {
+	  int count = 0;
+	  TreeMap<String, Integer> target = new TreeMap<String, Integer>();
+	  for (Map.Entry<String, Integer> entry:source.entrySet()) {
+	     if (count >= max) break;
+
+	     target.put(entry.getKey(), entry.getValue());
+	     count++;
+	  }
+	  return target;
+	}
 }
